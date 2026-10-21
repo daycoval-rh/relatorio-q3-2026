@@ -231,7 +231,7 @@ footer li{margin:4px 0 4px 18px}
 
   <section id="areas">
     <div class="sh">
-      <div><h2>Explore por área</h2><p>Cada quadro mostra o volume oficial do trimestre e a fatia de cada área no total. A barra colorida resume como as vagas foram fechadas (base: requisições do trimestre, áreas com 5 ou mais).</p></div>
+      <div><h2>Explore por área</h2><p>Cada quadro mostra o volume oficial do trimestre e a fatia de cada área no total. A barra colorida resume como as vagas foram fechadas.</p></div>
       <div class="legend" style="margin:0"><span><i style="background:var(--navy)"></i>Externo</span><span><i style="background:var(--purple)"></i>Prato Pronto</span><span><i style="background:var(--green)"></i>Indicação</span><span><i style="background:var(--yel)"></i>Outros</span></div>
     </div>
     <div class="areas" id="grid"></div>
@@ -249,13 +249,13 @@ footer li{margin:4px 0 4px 18px}
           <thead><tr><th>Área</th><th>Externo</th><th>Prato Pronto</th><th class="hm">Indicação</th></tr></thead>
           <tbody></tbody>
         </table>
-        <div class="hint" style="padding:0 12px 12px">Composição por área calculada sobre as requisições abertas e concluídas no trimestre (251).</div>
+        <div class="hint" style="padding:0 12px 12px">Composição calculada sobre as requisições abertas e concluídas no trimestre.</div>
       </div>
     </div>
   </section>
 
   <section id="origem">
-    <div class="sh"><div><h2>De onde vêm nossos talentos</h2><p>Empresa anterior das 414 pessoas contratadas no trimestre. 366 têm a empresa anterior informada, e é sobre elas que fazemos a divisão abaixo.</p></div></div>
+    <div class="sh"><div><h2>De onde vêm nossos talentos</h2><p>Empresa anterior declarada pelos profissionais contratados no trimestre.</p></div></div>
     <div class="card pad" id="origstats"></div>
     <div class="card pad" style="margin-top:14px">
       <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--navy);margin-bottom:8px">De quais bancos vieram os <span id="bankcount"></span> profissionais</h4>
@@ -289,7 +289,7 @@ footer li{margin:4px 0 4px 18px}
           <div><div class="v" style="color:var(--navy)">139</div><div class="l">trouxemos</div></div>
           <div><div class="v" style="color:var(--coral)">48</div><div class="l">perdemos</div></div>
         </div>
-        <div class="insight"><b>Para cada talento que sai</b> para esses bancos, o Daycoval atrai quase 3. C6 Bank e XP Inc. são os únicos com saldo negativo e entram no radar de retenção.</div>
+        <div class="insight"><b>Ganhamos mais do que perdemos.</b> Nos últimos 12 meses, 139 profissionais vieram desses 10 bancos para o Daycoval, e 48 saíram do Daycoval para eles. Só com C6 Bank e XP Inc. perdemos mais pessoas do que trouxemos.</div>
       </div>
     </div>
   </section>
@@ -297,14 +297,13 @@ footer li{margin:4px 0 4px 18px}
 
 <footer>
   <div class="wrap">
-    <h5>Notas sobre as bases</h5>
+    <h5>Metodologia</h5>
     <ul>
-      <li>Volumes por área e por mês: resumos mensais de Atração & Seleção (443 vagas fechadas no trimestre).</li>
-      <li>Tipo de processo e motivo por área: requisições abertas e concluídas entre julho e setembro (251).</li>
-      <li>Empresa anterior: base de contratações do trimestre (414 pessoas, 366 com empresa anterior informada). "Bancos" considera bancos comerciais, de investimento, digitais e cooperativas de crédito. Promotoras, corretoras, DTVMs, seguradoras, meios de pagamento e gestoras estão em "Outras instituições do mercado financeiro".</li>
-      <li>Origem por área: contratações vinculadas ao segmento pelo cruzamento com a base de requisições (201 de 414).</li>
-      <li>Percentuais arredondados em uma casa decimal. Por isso, a soma de um grupo pode ficar em 99,9% ou 100,1%.</li>
-      <li>Fluxo de talentos: LinkedIn Talent Insights, últimos 12 meses. Não se refere apenas ao trimestre.</li>
+      <li>Volume por área e por mês: vagas fechadas no trimestre, conforme os resumos mensais de Atração &amp; Seleção.</li>
+      <li>Tipo de processo e motivo da vaga: requisições abertas e concluídas dentro do próprio trimestre.</li>
+      <li>Origem dos profissionais: empresa anterior declarada na contratação. "Bancos" reúne bancos comerciais, de investimento, digitais e cooperativas de crédito. Promotoras, corretoras, DTVMs, seguradoras, meios de pagamento e gestoras aparecem em "Outras instituições do mercado financeiro".</li>
+      <li>Percentuais arredondados em uma casa decimal.</li>
+      <li>Fluxo de talentos com o mercado: LinkedIn Talent Insights, últimos 12 meses.</li>
     </ul>
     <p style="margin-top:14px">Banco Daycoval · Atração & Seleção · Confidencial, uso interno</p>
   </div>
@@ -400,12 +399,12 @@ const CATS=[["bank","Bancos","var(--navy)"],["fin","Outras instituições do mer
   const P=CATS.map(([k,l,c])=>[l,o.cats[k]||0,c]); const PP=pcts(P.map(x=>x[1]),o.orgsN,1);
   document.getElementById("origstats").innerHTML = `
     <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px">
-      <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--navy)">Origem das ${o.orgsN} contratações com empresa anterior informada</h4>
-      <span style="font-size:12.5px;color:var(--mut)">Total do trimestre: ${o.hires} contratações, das quais ${na} sem empresa anterior informada</span></div>
+      <h4 style="font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--navy)">Origem de ${o.orgsN} profissionais contratados</h4>
+      </div>
     <div class="stack" style="height:26px;border-radius:7px">${P.map(([k,v,c])=>`<div title="${k}: ${v}" style="width:${v/o.orgsN*100}%;background:${c}"></div>`).join("")}</div>
     <div class="cats5">${P.map(([k,v,c],j)=>`
       <div><div style="font-size:28px;font-weight:800;color:${c};letter-spacing:-.5px">${v} <span style="font-size:14px;color:var(--mut);font-weight:700">${PP[j]}</span></div><div style="font-size:13px;color:var(--mut)">${k}</div></div>`).join("")}</div>
-    <div class="hint">${P.map(x=>x[1]).join(" + ")} = ${o.orgsN} contratações com empresa anterior informada.</div>`;
+    <div class="hint">${P.map(x=>x[1]).join(" + ")} = ${o.orgsN} profissionais.</div>`;
   const big=o.banks.filter(x=>x.v>=3), rest=o.banks.filter(x=>x.v<3), restSum=rest.reduce((a,x)=>a+x.v,0), mx=big[0].v;
   document.getElementById("bankcount").textContent=o.cats.bank;
   document.getElementById("bankbars").innerHTML = big.map(x=>`
@@ -456,12 +455,12 @@ function openArea(i){
       <div class="stack">${items.map(k=>`<div title="${k}" style="width:${s.proc[k]/m.n*100}%;background:${PCOL[k]}"></div>`).join("")}</div>
       <div class="lst">${items.map((k,j)=>`<div class="it"><i style="background:${PCOL[k]}"></i><span>${k}</span><span class="c">${IP[j]}</span><span class="pc">${s.proc[k]} de ${m.n}</span></div>`).join("")}</div>
       ${insightFor(s,m)}
-      <div class="base">Base: ${m.n} ${m.n===1?"requisição da área aberta e concluída":"requisições da área abertas e concluídas"} no trimestre.${m.n<5?" Base reduzida, por isso mostramos apenas as quantidades.":""}</div></div>`;
+      <div class="base">Base: ${m.n} ${m.n===1?"requisição aberta e concluída":"requisições abertas e concluídas"} no trimestre.</div></div>`;
     const sub=s.motivo["Substituição"]||0, aq=s.motivo["Aumento de Quadro"]||0, aqt=s.motivo["Aumento de Quadro Temporário"]||0; const MP=m.n>=5?pcts([aq+aqt,sub],m.n,1):[String(aq+aqt),String(sub)];
     h+=`<div class="card"><h4>Motivo da vaga</h4><div class="chips">
       <div class="chip" style="background:var(--greenlt)"><b style="color:var(--green)">${MP[0]}</b><span>${m.n>=5?`aumento de quadro (${aq+aqt})`:"aumento de quadro"}</span></div>
       <div class="chip" style="background:var(--purplt)"><b style="color:var(--purple)">${MP[1]}</b><span>${m.n>=5?`substituição (${sub})`:"substituição"}</span></div></div>
-      <div class="base">Base: ${m.n} ${m.n===1?"requisição da área aberta e concluída":"requisições da área abertas e concluídas"} no trimestre.${m.n<5?" Base reduzida, por isso mostramos apenas as quantidades.":""}</div></div>`;
+      <div class="base">Base: ${m.n} ${m.n===1?"requisição aberta e concluída":"requisições abertas e concluídas"} no trimestre.</div></div>`;
   }
   if(s.orgsN){
     const cats=CATS.filter(([k])=>s.cats[k]); const CP=s.orgsN>=5?pcts(cats.map(([k])=>s.cats[k]),s.orgsN,1):cats.map(()=>"");
@@ -469,8 +468,8 @@ function openArea(i){
       <div class="stack">${cats.map(([k,l,c])=>`<div title="${l}" style="width:${s.cats[k]/s.orgsN*100}%;background:${c}"></div>`).join("")}</div>
       <div class="lst">${cats.map(([k,l,c],j)=>`<div class="it"><i style="background:${c}"></i><span>${l}</span><span class="c">${CP[j]}</span><span class="pc">${s.cats[k]} de ${s.orgsN}</span></div>`).join("")}</div>
       ${s.banks.length?`<h4 style="margin-top:16px">Bancos de origem</h4><div class="orgs">${s.banks.map(o=>`<div class="o"><div class="t">${logo(o.n)}<span>${esc(o.n)}</span></div>
-        <div class="b k" style="width:${o.v/s.banks[0].v*100}%"></div><div class="c">${o.v}</div></div>`).join("")}</div>`:`<div class="base" style="margin-top:6px">Nenhum contratado da área veio de banco nesta base.</div>`}
-      <div class="base">Base: ${s.orgsN} ${s.orgsN===1?"contratação da área com empresa anterior informada e vinculada":"contratações da área com empresa anterior informada e vinculadas"} ao segmento.${s.orgsN<5?" Base reduzida, por isso mostramos apenas as quantidades.":""}</div></div>`;
+        <div class="b k" style="width:${o.v/s.banks[0].v*100}%"></div><div class="c">${o.v}</div></div>`).join("")}</div>`:`<div class="base" style="margin-top:6px">Nenhum profissional da área veio de banco no trimestre.</div>`}
+      <div class="base">Base: ${s.orgsN} ${s.orgsN===1?"profissional contratado":"profissionais contratados"} com empresa anterior declarada.</div></div>`;
   }
   document.getElementById("dbody").innerHTML=h;
   document.getElementById("dbody").scrollTop=0;
