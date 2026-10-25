@@ -209,8 +209,7 @@ section{padding:48px 0 8px}
   .area{transform:none!important;box-shadow:none}
   .hero{padding:24px 0 28px}
   section{padding-top:22px}
-  #origem .two>.card:last-child{display:none}
-  #origem .two{grid-template-columns:1fr}
+  #depcard{display:none}
   #anexo{break-before:page}
   #mercado .tabs,#mercado .mkr .go{display:none!important}
   .mk-pr{break-before:page}
@@ -308,13 +307,8 @@ footer li{margin:4px 0 4px 18px}
   <section id="origem">
     <div class="sh"><div><h2>De onde vêm nossos talentos</h2><p>Empresa anterior dos 443 profissionais contratados de julho a setembro (base interna).</p></div></div>
     <div class="card pad" id="origstats"></div>
-    <div class="two" style="margin-top:14px">
-      <div class="card pad">
-        <h4 class="h4c">De quais bancos vieram os <span id="bankcount"></span> profissionais</h4>
-        <div class="bars" id="bankbars"></div>
-        <div class="hint" id="bankrest"></div>
-      </div>
-      <div class="card pad">
+    <div style="margin-top:14px">
+      <div class="card pad" id="depcard">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px">
           <h4 class="h4c" style="margin:0">Origem por departamento</h4>
           <label for="depsel" class="hint" style="margin:0;display:flex;gap:8px;align-items:center">Departamento
@@ -343,7 +337,7 @@ footer li{margin:4px 0 4px 18px}
     </div>
     <div class="tabs" role="tablist"><button role="tab" class="on" data-v="b">Por banco</button><button role="tab" data-v="a">Por área</button></div>
     <div class="card mk" id="mkview"></div>
-    <div class="hint">Perfis do LinkedIn em que a troca de empresa aparece. A seção Origem dos talentos usa a base interna e cobre só as contratações de julho a setembro, por isso os números são diferentes.</div>
+    <div class="hint">Perfis do LinkedIn em que a troca de empresa aparece.</div>
   </section>
   <section id="anexo" class="print-only">
     <div id="mk-print"></div>
@@ -429,13 +423,6 @@ const CATS=[["bank","Bancos","var(--navy)"],["fin","Outras instituições financ
     <div class="stack" style="height:26px;border-radius:7px">${P.map(([k,v,c])=>`<div title="${k}: ${v}" style="width:${v/O.total*100}%;background:${c}"></div>`).join("")}</div>
     <div class="cats6">${P.map(([k,v,c])=>`<div><div style="font-size:26px;font-weight:800;color:${c};letter-spacing:-.5px">${v} <span style="font-size:13px;color:var(--mut);font-weight:700">${pct(v,O.total)}</span></div><div style="font-size:12.5px;color:var(--mut)">${k}</div></div>`).join("")}</div>
     `;
-  const big=O.banks.filter(x=>x.v>=3), rest=O.banks.filter(x=>x.v<3), restSum=rest.reduce((a,x)=>a+x.v,0), mx=big[0].v;
-  document.getElementById("bankcount").textContent=O.cats.bank;
-  document.getElementById("bankbars").innerHTML = big.map(x=>`
-    <div class="row"><div class="lb" style="display:flex;justify-content:flex-end;align-items:center;gap:8px">${LOGO[x.n]?`<img src="${DATA.logos[LOGO[x.n]]}" alt="" style="width:20px;height:20px;border-radius:4px">`:""}${esc(x.n)}</div>
-    <div class="track"><div class="fill" style="width:${x.v/mx*100}%;background:var(--navy)"></div></div><div class="val">${x.v}</div></div>`).join("") +
-    `<div class="row"><div class="lb" style="color:var(--mut)">Outros ${rest.length} bancos</div><div class="track"><div class="fill" style="width:${Math.min(restSum/mx,1)*100}%;background:#B8C7DB"></div></div><div class="val">${restSum}</div></div>`;
-  document.getElementById("bankrest").textContent = "Outros bancos, com 1 ou 2 contratações cada: " + rest.map(x=>x.n).join(", ") + ".";
   const sel=document.getElementById("depsel");
   sel.innerHTML=O.deps.map((d,i)=>`<option value="${i}">${esc(d.name)} (${d.total})</option>`).join("");
   const show=i=>{const d=O.deps[i], cs=CATS.filter(([k])=>d.cats[k]);
@@ -443,7 +430,7 @@ const CATS=[["bank","Bancos","var(--navy)"],["fin","Outras instituições financ
       <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px"><b style="font-size:30px;color:var(--navy);letter-spacing:-.5px">${d.total}</b><span style="color:var(--mut);font-size:13px">${d.total===1?"profissional contratado":"profissionais contratados"} no trimestre</span></div>
       <div class="stack">${cs.map(([k,l,c])=>`<div title="${l}" style="width:${d.cats[k]/d.total*100}%;background:${c}"></div>`).join("")}</div>
       <div class="lst">${cs.map(([k,l,c])=>`<div class="it"><i style="background:${c}"></i><span>${l}</span><span class="c">${d.cats[k]}</span></div>`).join("")}</div>
-      ${d.banks.length?`<h4 class="h4c" style="margin-top:14px">Bancos de origem</h4><div class="orgs">${d.banks.map(o=>`<div class="o"><div class="t">${logo(o.n)}<span>${esc(o.n)}</span></div><div class="b k" style="width:${o.v/d.banks[0].v*100}%"></div><div class="c">${o.v}</div></div>`).join("")}</div>`:""}`;};
+`;};
   sel.onchange=()=>show(+sel.value); show(0);
 })();
 
