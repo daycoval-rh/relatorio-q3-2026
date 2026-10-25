@@ -134,6 +134,16 @@ section{padding:48px 0 8px}
 .pp .o{color:var(--mut);font-size:12px}
 .gone{display:inline-block;font-size:10.5px;font-weight:800;color:var(--red);background:var(--redlt);border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:1px}
 .ptab td.nm2{white-space:nowrap}
+.acc{border:1px solid var(--line);border-radius:10px;margin-top:8px;background:#fff}
+.acc summary{list-style:none;display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;font-weight:700;font-size:14px}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary:hover{background:#F5F8FC;border-radius:10px}
+.acc .sl{flex:1;display:flex;align-items:center;gap:8px;min-width:0}
+.acc .sc{color:var(--mut);font-size:12.5px;font-weight:700;white-space:nowrap}
+.acc .chev{color:var(--blue);font-size:20px;line-height:1;transition:transform .15s}
+.acc[open] .chev{transform:rotate(90deg)}
+.acc[open] summary{border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+.accb{padding:2px 14px 6px}
 /* decl */
 .mot{display:grid;grid-template-columns:1fr 56px;gap:10px;align-items:center;padding:8px 0}
 .mot .t{font-weight:600;font-size:14px}
@@ -524,7 +534,7 @@ function personHTML(p){
 }
 function groups(list,key,label){
   const g={}; list.forEach(p=>(g[p[key]]=g[p[key]]||[]).push(p));
-  return Object.entries(g).sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0])).map(([k,ps])=>`<div class="grp"><h5><span>${label?label(k):esc(k)}</span><span>${ps.length}</span></h5>${ps.map(personHTML).join("")}</div>`).join("");
+  return Object.entries(g).sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0])).map(([k,ps])=>`<details class="acc"><summary><span class="sl">${label?label(k):esc(k)}</span><span class="sc">${ps.length} ${ps.length===1?"pessoa":"pessoas"}</span><span class="chev">›</span></summary><div class="accb">${ps.map(personHTML).join("")}</div></details>`).join("");
 }
 function countsHTML(obj){
   return Object.entries(obj).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(([k,v])=>`<div class="ar-row" style="grid-template-columns:1fr 64px"><span>${esc(k)}</span><span>${v}</span></div>`).join("");
@@ -540,11 +550,12 @@ function openDrawer(eb,title,kpis,body){
 const kp=(i,o)=>`<div><b>${i}</b><span>${plural(i,"veio para o Daycoval","vieram para o Daycoval")}</span></div><div><b>${o}</b><span>${plural(o,"saiu do Daycoval","saíram do Daycoval")}</span></div><div><b>${i-o>0?"+":""}${i-o}</b><span>saldo</span></div>`;
 function openBank(k){
   const r=MKB[k], areas=[...new Set([...Object.keys(r.inA),...Object.keys(r.outA)])].sort((a,b)=>((r.inA[b]||0)+(r.outA[b]||0))-((r.inA[a]||0)+(r.outA[a]||0))||a.localeCompare(b));
-  let h=`<div class="card"><h4>Por área</h4><div class="ar-row hd"><span>Área</span><span>Vieram</span><span>Saíram</span></div>${areas.map(a=>`<div class="ar-row"><span>${esc(a)}</span><span style="color:var(--navy)">${r.inA[a]||0}</span><span style="color:var(--red)">${r.outA[a]||0}</span></div>`).join("")}</div>`;
+  let h=PEOPLE?"":`<div class="card"><h4>Por área</h4><div class="ar-row hd"><span>Área</span><span>Vieram</span><span>Saíram</span></div>${areas.map(a=>`<div class="ar-row"><span>${esc(a)}</span><span style="color:var(--navy)">${r.inA[a]||0}</span><span style="color:var(--red)">${r.outA[a]||0}</span></div>`).join("")}</div>`;
   if(PEOPLE){
     const pin=PEOPLE.filter(p=>p.b===r.n&&p.d==="in"), pout=PEOPLE.filter(p=>p.b===r.n&&p.d==="out");
-    if(pin.length) h+=`<div class="card"><h4>Vieram do ${esc(r.n)} para o Daycoval · ${pin.length}</h4>${groups(pin,"a")}</div>`;
-    h+=`<div class="card"><h4>Saíram do Daycoval para o ${esc(r.n)} · ${pout.length}</h4>${pout.length?groups(pout,"a"):`<div class="o" style="color:var(--mut);font-size:13px">Nenhuma saída para o ${esc(r.n)} no período.</div>`}</div>`;
+    h+=`<div class="hint" style="margin:0 2px">Clique numa área para ver os nomes e cargos.</div>`;
+    h+=`<div class="card"><h4 style="color:var(--navy)">Vieram do ${esc(r.n)} para o Daycoval · ${pin.length}</h4>${pin.length?groups(pin,"a"):`<div class="o" style="color:var(--mut);font-size:13px">Ninguém veio do ${esc(r.n)} no período.</div>`}</div>`;
+    h+=`<div class="card"><h4 style="color:var(--red)">Saíram do Daycoval para o ${esc(r.n)} · ${pout.length}</h4>${pout.length?groups(pout,"a"):`<div class="o" style="color:var(--mut);font-size:13px">Nenhuma saída para o ${esc(r.n)} no período.</div>`}</div>`;
   }
   openDrawer("Banco · últimos 12 meses",`<span style="display:inline-flex;align-items:center;gap:10px">${blogo(r.n,30)}${esc(r.n)}</span>`,kp(r.i,r.o),h);
 }
@@ -552,14 +563,15 @@ function openMkArea(k){
   const r=MKA[k]; let h="";
   if(PEOPLE){
     const pin=PEOPLE.filter(p=>p.a===r.n&&p.d==="in"), pout=PEOPLE.filter(p=>p.a===r.n&&p.d==="out");
-    const lb=b=>`<span style="display:inline-flex;align-items:center;gap:6px">${blogo(b,16)}${esc(b)}</span>`;
-    h+=`<div class="card"><h4>Vieram de · ${pin.length}</h4>${pin.length?groups(pin,"b",lb):`<div style="color:var(--mut);font-size:13px">Ninguém dessa área veio desses bancos no período.</div>`}</div>`;
-    h+=`<div class="card"><h4>Foram para · ${pout.length}</h4>${pout.length?groups(pout,"b",lb):`<div style="color:var(--mut);font-size:13px">Nenhuma saída dessa área para esses bancos no período.</div>`}</div>`;
+    const lb=b=>`${blogo(b,20)}<span>${esc(b)}</span>`;
+    h+=`<div class="hint" style="margin:0 2px">Todas as pessoas abaixo são da área ${esc(r.n)}. Clique num banco para ver os nomes e cargos.</div>`;
+    h+=`<div class="card"><h4 style="color:var(--navy)">Vieram para o Daycoval · ${pin.length}</h4>${pin.length?groups(pin,"b",lb):`<div style="color:var(--mut);font-size:13px">Ninguém dessa área veio desses bancos no período.</div>`}</div>`;
+    h+=`<div class="card"><h4 style="color:var(--red)">Saíram do Daycoval · ${pout.length}</h4>${pout.length?groups(pout,"b",lb):`<div style="color:var(--mut);font-size:13px">Nenhuma saída dessa área para esses bancos no período.</div>`}</div>`;
   } else {
     h+=`<div class="card"><h4>Vieram de · ${r.i}</h4>${r.i?countsHTML(r.inB):`<div style="color:var(--mut);font-size:13px">Ninguém dessa área veio desses bancos no período.</div>`}</div>`;
     h+=`<div class="card"><h4>Foram para · ${r.o}</h4>${r.o?countsHTML(r.outB):`<div style="color:var(--mut);font-size:13px">Nenhuma saída dessa área para esses bancos no período.</div>`}</div>`;
   }
-  openDrawer("Área · últimos 12 meses",esc(r.n),kp(r.i,r.o),h);
+  openDrawer("Área · últimos 12 meses",`Área ${esc(r.n)}`,kp(r.i,r.o),h);
 }
 // versão impressa: tabela por área + nomes por banco
 (() => {
